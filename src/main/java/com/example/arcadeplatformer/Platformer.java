@@ -18,10 +18,10 @@ public class Platformer extends Application{
         Controller controller = new Controller();
         fxmlLoader.setController(controller);
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Maze Game");
+        stage.setTitle("Platformer");
         stage.setScene(scene);
         stage.show();
-        //player maze 1
+
         Player p = new Player();
         p.loadSprite("robot.png");
         p.setMaze(new Image("maze.png"));
@@ -30,8 +30,9 @@ public class Platformer extends Application{
         p.setY(270);
         p.setResetX(p.getX());
         p.setResetY(p.getY());
+        p.propogate(1);
         controller.addToWorld(p);
-        //player maze 2
+
 
 
 

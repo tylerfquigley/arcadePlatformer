@@ -4,7 +4,8 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
-public class Player extends GameObject{
+public class Player extends GameObject implements Maskable{
+    Mask mask = new Mask(50,50);
     private boolean right=false;
     private  boolean left=false;
     private  boolean up=false;
@@ -18,9 +19,6 @@ public class Player extends GameObject{
     }
     @Override
     void toDo() {
-        //check if tab is active
-
-
         //fetch inputs from controller
         right= Controller.isRight();
         left= Controller.isLeft();
@@ -38,7 +36,8 @@ public class Player extends GameObject{
        //     System.out.println(getX()+","+getY());
        // }
         if (pixelReader!=null){
-            mazeCollide();
+            //checks for collision based on pixel values will use mask values instead
+           // mazeCollide();
         }
         setX(getX()+getHsp());
         setY(getY()+getVsp());
@@ -55,30 +54,52 @@ public class Player extends GameObject{
         Controller.resetInputs();
 
 }
+
+    @Override
+    public void projectMask(Mask mask) {
+
+    }
+
+    @Override
+    public void setMask(Mask mask) {
+
+    }
+
+    @Override
+    public Mask getMask() {
+        return this.mask;
+    }
+
+    @Override
+    public void propogate(int mask_chanel) {
+       mask.fill(mask_chanel);
+    }
+
+
+
+
+
+
     //maze collision
-   private void mazeCollide(){
+    private void mazeCollide(){
 
 
-       //check if collision will occur next frame
-       float tmpVsp= (int) getVsp();
-       float tmpHsp = (int) getHsp();
-       //check in x dimension
-       if (Collision.pixelCollision(this, pixelReader,Math.round(tmpHsp+(tmpHsp/Math.abs(tmpHsp)/2)),0)){
-           //step back before steping forward to collide
-           setX(Math.round(getX()-(tmpHsp/Math.abs(tmpHsp)/2)));
-           if (Math.round(tmpHsp+(tmpHsp/Math.abs(tmpHsp)/2))!=0) {int c=0;while(!Collision.pixelCollision(this, pixelReader, Math.round(tmpHsp+(tmpHsp/Math.abs(tmpHsp)/2))/Math.abs(Math.round(tmpHsp+(tmpHsp/Math.abs(tmpHsp)/2))),0)&&c<200){setX(getX()+tmpHsp/Math.abs(tmpHsp));c+=1;}}
-           setHsp(0);
-       };
-       //check in y dimension
-       if (Collision.pixelCollision(this, pixelReader, 0,Math.round(tmpVsp+(tmpVsp/Math.abs(tmpVsp)/2)))){
-           setY(Math.round(getY()-(tmpVsp/Math.abs(tmpVsp)/2)));
-           if (Math.round(tmpVsp+(tmpVsp/Math.abs(tmpVsp)/2))!=0) {int c=0;while(!Collision.pixelCollision(this, pixelReader, 0,Math.round(tmpVsp+(tmpVsp/Math.abs(tmpVsp)/2))/Math.abs(Math.round(tmpVsp+(tmpVsp/Math.abs(tmpVsp)/2))))&&c<200){setY(getY()+tmpVsp/Math.abs(tmpVsp));c+=1;}}
-           setVsp(0);
-       };
-   }
-protected boolean checkWin(){
-        boolean w= false;
-        w=getX()>image.getWidth();
-        return  w;
-}
+        //check if collision will occur next frame
+        float tmpVsp= (int) getVsp();
+        float tmpHsp = (int) getHsp();
+        //check in x dimension
+        if (Collision.pixelCollision(this, pixelReader,Math.round(tmpHsp+(tmpHsp/Math.abs(tmpHsp)/2)),0)){
+            //step back before steping forward to collide
+            setX(Math.round(getX()-(tmpHsp/Math.abs(tmpHsp)/2)));
+            if (Math.round(tmpHsp+(tmpHsp/Math.abs(tmpHsp)/2))!=0) {int c=0;while(!Collision.pixelCollision(this, pixelReader, Math.round(tmpHsp+(tmpHsp/Math.abs(tmpHsp)/2))/Math.abs(Math.round(tmpHsp+(tmpHsp/Math.abs(tmpHsp)/2))),0)&&c<200){setX(getX()+tmpHsp/Math.abs(tmpHsp));c+=1;}}
+            setHsp(0);
+        };
+        //check in y dimension
+        if (Collision.pixelCollision(this, pixelReader, 0,Math.round(tmpVsp+(tmpVsp/Math.abs(tmpVsp)/2)))){
+            setY(Math.round(getY()-(tmpVsp/Math.abs(tmpVsp)/2)));
+            if (Math.round(tmpVsp+(tmpVsp/Math.abs(tmpVsp)/2))!=0) {int c=0;while(!Collision.pixelCollision(this, pixelReader, 0,Math.round(tmpVsp+(tmpVsp/Math.abs(tmpVsp)/2))/Math.abs(Math.round(tmpVsp+(tmpVsp/Math.abs(tmpVsp)/2))))&&c<200){setY(getY()+tmpVsp/Math.abs(tmpVsp));c+=1;}}
+            setVsp(0);
+        };
+    }
+
 }

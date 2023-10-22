@@ -31,8 +31,8 @@ public class Controller implements Runnable,inputHandler{
     private Image maze1;
 
     private AnimationTimer a1;
-    private ArrayList<GameObject> world;
-    private static int tabNumber=1;
+    private Level level;
+
 
 
     @FXML
@@ -42,7 +42,7 @@ public class Controller implements Runnable,inputHandler{
     public void initialize(){
         gc = can.getGraphicsContext2D();
         maze1 = new Image("maze.png");
-        world = new ArrayList<GameObject>();
+        level = new Level(200,200);
         can.setWidth(maze1.getWidth());
         can.setHeight(maze1.getHeight());
 
@@ -52,7 +52,7 @@ public class Controller implements Runnable,inputHandler{
     }
     @FXML
     private void reset() {
-        for (GameObject gameObject : world) {
+        for (GameObject gameObject : level.gameObjects) {
                 gameObject.reset();
         }
     }
@@ -63,12 +63,12 @@ public class Controller implements Runnable,inputHandler{
             public void handle(long now) {
 
                 //first maze
-                if (Controller.tabNumber==1){
+
                 gc.clearRect(0,0,can.getWidth(),can.getHeight());
-                gc.drawImage(maze1,0,0);}
+                gc.drawImage(maze1,0,0);
                 //second maze
 
-                for (GameObject gameObject : world) gameObject.draw();
+                for (GameObject gameObject : level.gameObjects) gameObject.draw();
             }
         };
         a1.start();
@@ -84,7 +84,7 @@ public class Controller implements Runnable,inputHandler{
         }
     }
     public void addToWorld(GameObject gameObject){
-        world.add(gameObject);
+        level.gameObjects.add(gameObject);
     }
     @Override
     //backend logic
@@ -104,7 +104,7 @@ public class Controller implements Runnable,inputHandler{
         }
     }
     private void iterateThroughAll(){
-        for (GameObject gameObject : world) {
+        for (GameObject gameObject : level.gameObjects) {
             gameObject.toDo();
         }
     }
@@ -154,9 +154,7 @@ public class Controller implements Runnable,inputHandler{
     public static boolean isDown(){
         return down;
     };
-    public static int currentTab(){
-        return tabNumber;
-    }
+
     public static void resetInputs(){
         up=false;
         down=false;

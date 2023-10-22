@@ -20,7 +20,7 @@ public abstract class GameObject {
    private int bBoxW=0;
     private int bBoxH=0;
     private GraphicsContext gc;
-    private int tabNumber=0;
+
    private Image sprite;
    // graphics rendering called from animation timer
     void draw(){
